@@ -1,0 +1,26 @@
+{
+  "name": "2048game",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.html",
+  "scripts": {
+    "build": "parcel build src/index.html --no-source-maps --public-url . --no-cache",
+    "start": "parcel --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethancanne/2048Game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ethancanne/2048Game/issues"
+  },
+  "homepage": "https://github.com/ethancanne/2048Game#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.2.0",
+    "parcel": "^2.2.0",
+    "posthtml-include": "^1.7.2",
+    "sass": "^1.47.0"
+  }
+}
