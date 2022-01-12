@@ -5,7 +5,7 @@
   "source": "src/index.html",
   "scripts": {
     "build": "parcel build src/index.html --no-source-maps --public-url . --no-cache",
-    "start": "parcel --open"
+    "start": "parcel --open --no-cache --no-source-maps"
   },
   "repository": {
     "type": "git",
