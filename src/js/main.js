@@ -1,3 +1,4 @@
+import { right, left, up, down } from "./move";
 const data = [
   [4, "b", "b", "b"],
   [2, 16, "b", "b"],
