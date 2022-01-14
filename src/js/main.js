@@ -1,8 +1,8 @@
 const data = [
-  [2, 2, 0, 0],
-  [2, 4, 0, 0],
-  [2, 4, 0, 0],
-  [2, 4, 0, 0],
+  [2, 2, "b", "b"],
+  [2, 16, "b", "b"],
+  [2, 4, "b", "b"],
+  [2, 4, "b", "b"],
 ];
 const board = document.getElementsByClassName("board")[0];
 
@@ -12,7 +12,8 @@ data.forEach(row => {
 
   row.forEach(item => {
     const tile = document.createElement("div");
-    tile.textContent = item;
+    if (item == "b") tile.textContent = "";
+    else tile.textContent = item;
     tile.className = "tile";
     rowElement.appendChild(tile);
   });
