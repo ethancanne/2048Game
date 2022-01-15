@@ -2,82 +2,154 @@ $background-color: #faf8ef;
 $board-color: #bbada0;
 $text-color: #776e65;
 $tile-color: #eee4da;
-
+* {
+  margin: 0;
+  padding: 0;
+}
 body {
   background-color: $background-color;
   color: $text-color;
-
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-}
+  overflow: hidden;
 
-.title {
-  width: 100%;
-  text-align: center;
-}
-.board-container {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  .board {
+  #app {
     display: flex;
-    flex-direction: column;
-    padding: 5px;
-    border-radius: 10px;
-
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
     background-color: $board-color;
 
-    .row {
+    #score-container {
+      flex: 0.5;
       display: flex;
-      flex-direction: row;
-      .tile {
+      justify-content: right;
+      align-items: center;
+      transition: all 1s ease-in-out;
+      height: 100%;
+      width: 100%;
+      padding: 20px;
+      background-color: rgba(255, 255, 255);
+
+      .options {
+        border-radius: 20px;
+        padding: 20px;
+        position: relative;
+        transition: 1s all;
+
+        min-height: 400px;
+        min-width: 400px;
+
+        width: 40%;
+        .title {
+          font-size: 20px;
+          padding: 0;
+          margin: 0;
+          color: gray;
+          text-align: center;
+        }
+        .score {
+          padding: 20px;
+          text-align: center;
+          margin: 20px 0 20px 0;
+        }
+        #collapseBtn {
+          position: absolute;
+          color: white;
+          right: -45px;
+          top: 50%;
+          border: none;
+          background-color: rgba(0, 0, 0, 0);
+          font-size: 30px;
+          cursor: pointer;
+          transition: 1s all;
+        }
+      }
+      &.collapse {
+        margin-left: -50vw;
+        background-color: rgba(255, 255, 255, 0.2);
+
+        .options {
+          border-color: rgba(#000000, 0);
+          #collapseBtn {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+
+    #board-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+
+      .board {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-
-        font-size: 50px;
-        font-weight: bolder;
-
-        width: 90px;
-        height: 90px;
-        margin: 5px;
+        flex-direction: column;
+        padding: 5px;
         border-radius: 10px;
-        background-color: wheat;
 
-        // &.2 {
-        //   background-color: wheat;
-        // }
-        // &.4 {
-        //   background-color: rgb(216, 183, 121);
-        // }
-        // &.8 {
-        //   background-color: rgb(140, 112, 60);
-        // }
-        // &.16 {
-        //   background-color: rgb(111, 101, 82);
-        // }
-        // &.32 {
-        //   background-color: rgb(75, 63, 39);
-        // }
-        // &.64 {
-        //   background-color: rgb(48, 37, 15);
-        // }
-        // &.128 {
-        //   background-color: rgb(84, 58, 6);
-        // }
-        // &.256 {
-        //   background-color: rgb(43, 30, 3);
-        // }
-        // &.512 {
-        //   background-color: rgb(63, 63, 63);
-        // }
-        // &.1024 {
-        //   background-color: rgb(72, 113, 55);
-        // }
-        // &.2048 {
-        //   background-color: rgb(133, 235, 90);
-        // }
+        .row {
+          display: flex;
+          flex-direction: row;
+          .tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            transition: all 0.2s;
+            &:hover {
+              box-shadow: rgba(0, 0, 0, 0.221) 0px 0px 50px;
+            }
+
+            font-size: 50px;
+            font-weight: bolder;
+
+            width: 90px;
+            height: 90px;
+            margin: 5px;
+            border-radius: 10px;
+            background-color: wheat;
+
+            // &.2 {
+            //   background-color: wheat;
+            // }
+            // &.4 {
+            //   background-color: rgb(216, 183, 121);
+            // }
+            // &.8 {
+            //   background-color: rgb(140, 112, 60);
+            // }
+            // &.16 {
+            //   background-color: rgb(111, 101, 82);
+            // }
+            // &.32 {
+            //   background-color: rgb(75, 63, 39);
+            // }
+            // &.64 {
+            //   background-color: rgb(48, 37, 15);
+            // }
+            // &.128 {
+            //   background-color: rgb(84, 58, 6);
+            // }
+            // &.256 {
+            //   background-color: rgb(43, 30, 3);
+            // }
+            // &.512 {
+            //   background-color: rgb(63, 63, 63);
+            // }
+            // &.1024 {
+            //   background-color: rgb(72, 113, 55);
+            // }
+            // &.2048 {
+            //   background-color: rgb(133, 235, 90);
+            // }
+          }
+        }
       }
     }
   }

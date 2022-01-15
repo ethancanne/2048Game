@@ -1,9 +1,9 @@
 import { right, left, up, down } from "./move";
 const data = [
-  [4, "b", "b", "b"],
-  [2, 16, "b", "b"],
-  [2, 4, "b", "b"],
-  [2, 4, "b", "b"],
+  [4, 0, 0, 0],
+  [2, 16, 0, 0],
+  [2, 4, 0, 0],
+  [2, 4, 0, 0],
 ];
 
 const board = document.getElementsByClassName("board")[0];
@@ -17,7 +17,7 @@ const rerenderBoard = () => {
 
     row.forEach(item => {
       const tile = document.createElement("div");
-      if (item == "b") tile.textContent = "";
+      if (item == 0) tile.textContent = "";
       else tile.textContent = item;
       tile.className = "tile";
       rowElement.appendChild(tile);
@@ -27,24 +27,24 @@ const rerenderBoard = () => {
 };
 rerenderBoard();
 
+//Initalize arrow key event listeners
 const checkKey = e => {
   e = e || window.event;
 
   if (e.keyCode == "38") {
-    console.log("Up");
+    up(data);
   } else if (e.keyCode == "40") {
-    console.log("Down");
-
-    // down arrow
+    down(data);
   } else if (e.keyCode == "37") {
-    console.log("Left");
-
-    // left arrow
+    left(data);
   } else if (e.keyCode == "39") {
-    console.log("Right");
-
-    // right arrow
+    right(data);
   }
+};
+
+//Initalize collapse button click event listener
+document.getElementById("collapseBtn").onclick = () => {
+  document.getElementById("score-container").classList.toggle("collapse");
 };
 
 document.onkeydown = checkKey;
