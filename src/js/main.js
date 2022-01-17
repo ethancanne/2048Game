@@ -1,14 +1,14 @@
 import { right, left, up, down } from "./move";
 const data = [
-  [4, 0, 0, 0],
-  [2, 16, 0, 0],
-  [2, 4, 0, 0],
-  [2, 4, 0, 0],
+  [2, 2, 2, 0],
+  [2, 2, 2, 0],
+  [2, 2, 4, 0],
+  [2, 4, 2, 0],
 ];
 
 const board = document.getElementsByClassName("board")[0];
 
-//rerender the board from the data array
+// Render the board from the data array
 const rerenderBoard = () => {
   board.innerHTML = "";
   data.forEach(row => {
@@ -17,8 +17,7 @@ const rerenderBoard = () => {
 
     row.forEach(item => {
       const tile = document.createElement("div");
-      if (item == 0) tile.textContent = "";
-      else tile.textContent = item;
+      tile.textContent = item !== 0 ? item : "";
       tile.className = "tile";
       rowElement.appendChild(tile);
     });
@@ -29,16 +28,31 @@ rerenderBoard();
 
 //Initalize arrow key event listeners
 const checkKey = e => {
+  board.style.animation = "none";
+  board.offsetHeight; /* trigger reflow */
+  board.style.animation = null;
   e = e || window.event;
 
+  var okay = false;
   if (e.keyCode == "38") {
-    up(data);
+    okay = up(data);
+    board.style.animation = "up 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "40") {
-    down(data);
+    okay = down(data);
+    board.style.animation = "down 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "37") {
-    left(data);
+    okay = left(data);
+    board.style.animation = "left 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "39") {
-    right(data);
+    okay = right(data);
+    board.style.animation = "right 0.5s ease-in-out 0s 1 forwards";
+  }
+
+  okay = true;
+  if (okay) {
+    rerenderBoard();
+    // TODO : KSH : 01/26/2022 : Generate New Tile on Board
+    // TODO : KSH : 01/26/2022 : Check if the board is full and unplayable (You Lose)
   }
 };
 

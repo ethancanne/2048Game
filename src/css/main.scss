@@ -90,7 +90,7 @@ body {
         display: flex;
         flex-direction: column;
         padding: 5px;
-        border-radius: 10px;
+        // border-radius: 100px;
 
         .row {
           display: flex;
@@ -102,9 +102,6 @@ body {
             text-align: center;
 
             transition: all 0.2s;
-            &:hover {
-              box-shadow: rgba(0, 0, 0, 0.221) 0px 0px 50px;
-            }
 
             font-size: 50px;
             font-weight: bolder;
@@ -152,5 +149,75 @@ body {
         }
       }
     }
+  }
+}
+
+@keyframes right {
+  0% {
+    background-color: rgba(255, 255, 255, 0.481);
+    box-shadow: rgba(255, 255, 255, 0) 0px 0px 0px;
+  }
+  15% {
+    box-shadow: rgba(255, 255, 255, 0.132) 0px 0px 0px;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.283);
+    box-shadow: rgba(255, 255, 255, 0.372) 200px 0px 0px;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: rgba(255, 255, 255, 0) 200px 0px 0px;
+  }
+}
+@keyframes left {
+  0% {
+    background-color: rgba(255, 255, 255, 0.481);
+    box-shadow: rgba(255, 255, 255, 0) 0px 0px 0px;
+  }
+  15% {
+    box-shadow: rgba(255, 255, 255, 0.132) 0px 0px 0px;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.283);
+    box-shadow: rgba(255, 255, 255, 0.372) -200px 0px 0px;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: rgba(255, 255, 255, 0) -200px 0px 0px;
+  }
+}
+
+@keyframes up {
+  0% {
+    background-color: rgba(255, 255, 255, 0.481);
+    box-shadow: rgba(255, 255, 255, 0) 0px 0px 0px;
+  }
+  15% {
+    box-shadow: rgba(255, 255, 255, 0.132) 0px 0px 0px;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.283);
+    box-shadow: rgba(255, 255, 255, 0.372) 0px -200px 0px;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: rgba(255, 255, 255, 0) 0px -200px 0px;
+  }
+}
+@keyframes down {
+  0% {
+    background-color: rgba(255, 255, 255, 0.481);
+    box-shadow: rgba(255, 255, 255, 0) 0px 0px 0px;
+  }
+  15% {
+    box-shadow: rgba(255, 255, 255, 0.132) 0px 0px 0px;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.283);
+    box-shadow: rgba(255, 255, 255, 0.372) 0px 200px 0px;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: rgba(255, 255, 255, 0) 0px 200px 0px;
   }
 }
