@@ -1,9 +1,9 @@
-import { right, left, up, down } from "./move";
+import { right, left, up, down, generateTile } from "./move";
 const data = [
-  [2, 2, 2, 0],
-  [2, 2, 2, 0],
-  [2, 2, 4, 0],
-  [2, 4, 2, 0],
+  [2, 2, 0, 0],
+  [0, 2, 0, 0],
+  [0, 2, 0, 0],
+  [0, 0, 4, 0],
 ];
 
 const board = document.getElementsByClassName("board")[0];
@@ -33,27 +33,27 @@ const checkKey = e => {
   board.style.animation = null;
   e = e || window.event;
 
-  var okay = false;
+  var matchOccured = false;
   if (e.keyCode == "38") {
-    okay = up(data);
+    matchOccured = up(data);
     board.style.animation = "up 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "40") {
-    okay = down(data);
+    matchOccured = down(data);
     board.style.animation = "down 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "37") {
-    okay = left(data);
+    matchOccured = left(data);
     board.style.animation = "left 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "39") {
-    okay = right(data);
+    matchOccured = right(data);
     board.style.animation = "right 0.5s ease-in-out 0s 1 forwards";
   }
 
-  okay = true;
-  if (okay) {
-    rerenderBoard();
+  if (matchOccured) {
+    generateTile(data);
     // TODO : KSH : 01/26/2022 : Generate New Tile on Board
     // TODO : KSH : 01/26/2022 : Check if the board is full and unplayable (You Lose)
   }
+  rerenderBoard();
 };
 
 //Initalize collapse button click event listener

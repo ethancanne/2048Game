@@ -32,7 +32,7 @@ export const left = board => {
         shift = false;
         for (var col = 1; col < board[row].length; col++) {
           // Check if the column to the left is empty and the right is not-empty
-          if ((board[row][col - 1] === 0) && (board[row][col] !== 0)) {
+          if (board[row][col - 1] === 0 && board[row][col] !== 0) {
             board[row][col - 1] = board[row][col];
             board[row][col] = 0;
             shift = true;
@@ -57,7 +57,7 @@ export const left = board => {
         }
 
         // Do comparisons using [col + 1] for previous element
-        if (board[row][col + 1] === board[row][col]) {
+        if (board[row][col + 1] === board[row][col] && board[row][col] !== 0) {
           board[row][col] = board[row][col] * 2;
           board[row][col + 1] = 0;
           match = true;
@@ -96,7 +96,7 @@ export const right = board => {
         shift = false;
         for (var col = board[row].length - 2; col > -1; col--) {
           // Check if the column to the right is empty and the left is not-empty
-          if ((board[row][col + 1] === 0) && (board[row][col] !== 0)) {
+          if (board[row][col + 1] === 0 && board[row][col] !== 0) {
             board[row][col + 1] = board[row][col];
             board[row][col] = 0;
             shift = true;
@@ -121,7 +121,7 @@ export const right = board => {
         }
 
         // Do comparisons using [col - 1] for previous element
-        if (board[row][col - 1] === board[row][col]) {
+        if (board[row][col - 1] === board[row][col] && board[row][col] !== 0) {
           board[row][col] = board[row][col] * 2;
           board[row][col - 1] = 0;
           match = true;
@@ -136,4 +136,30 @@ export const right = board => {
   // Return whether or not a successful match has been made
   return match;
 };
-export const generateTile = board => {};
+export const generateTile = board => {
+  //Loop throught the board and record all blank tiles and their positions
+  var blanks = [];
+  board.forEach((row, i) => {
+    row.forEach((tile, j) => {
+      if (tile === 0) blanks.push([i, j]);
+    });
+  });
+
+  //Grab a random value from the blanks array
+  var randomValue = getRandomInt(0, blanks.length - 1);
+
+  //Set the blank tile in the position corresponding to that random value equal to either 2 or a 4
+  board[blanks[randomValue][0]][blanks[randomValue][1]] = probability(0.5)
+    ? 2
+    : 4;
+};
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+var probability = function (n) {
+  return !!n && Math.random() <= n;
+};
