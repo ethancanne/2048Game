@@ -1,0 +1,11 @@
+$background-color: #faf8ef;
+$board-color: #bbada0;
+$text-color: #776e65;
+$tile-color: #eee4da;
+$width: 1100px;
+
+@mixin mobile {
+  @media (max-width:#{$width}) {
+    @content;
+  }
+}

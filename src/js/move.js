@@ -21,6 +21,8 @@ export const left = board => {
   var match = false;
   var repeated = false;
 
+  var matchedTiles = [];
+
   // Use do...while() for a breakable "if" statement
   do {
     // Run through each available row
@@ -60,6 +62,7 @@ export const left = board => {
         if (board[row][col + 1] === board[row][col] && board[row][col] !== 0) {
           board[row][col] = board[row][col] * 2;
           board[row][col + 1] = 0;
+          matchedTiles.push([row, col]);
           match = true;
         }
       }
@@ -70,7 +73,7 @@ export const left = board => {
   } while (repeated); // End while() when broken prematurely
 
   // Return whether or not a successful match has been made
-  return match;
+  return matchedTiles;
 };
 
 /***********************

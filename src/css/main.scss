@@ -1,7 +1,5 @@
-$background-color: #faf8ef;
-$board-color: #bbada0;
-$text-color: #776e65;
-$tile-color: #eee4da;
+@import "./globals.scss";
+
 * {
   margin: 0;
   padding: 0;
@@ -25,7 +23,7 @@ body {
       display: flex;
       justify-content: right;
       align-items: center;
-      transition: all 1s ease-in-out;
+      transition: all 0.5s ease-in-out;
       height: 100%;
       width: 100%;
       padding: 20px;
@@ -35,12 +33,21 @@ body {
         border-radius: 20px;
         padding: 20px;
         position: relative;
-        transition: 1s all;
+        transition: 0.5s all;
 
         min-height: 400px;
         min-width: 400px;
 
         width: 40%;
+        #play-btn {
+          background-color: whitesmoke;
+          border: none;
+          font-size: 30px;
+          padding: 20px;
+          margin: 20px;
+          display: none;
+        }
+
         .title {
           font-size: 20px;
           padding: 0;
@@ -52,17 +59,18 @@ body {
           padding: 20px;
           text-align: center;
           margin: 20px 0 20px 0;
+          font-size: 40px;
         }
         #collapseBtn {
           position: absolute;
           color: white;
-          right: -45px;
+          right: -50px;
           top: 50%;
           border: none;
           background-color: rgba(0, 0, 0, 0);
           font-size: 30px;
           cursor: pointer;
-          transition: 1s all;
+          transition: 0.5s all;
         }
       }
       &.collapse {
@@ -76,6 +84,12 @@ body {
           }
         }
       }
+      &.play-screen {
+        justify-content: center;
+        #play-btn {
+          display: inline;
+        }
+      }
     }
 
     #board-container {
@@ -85,12 +99,12 @@ body {
       justify-content: center;
       width: 100%;
       height: 100%;
+      transition: all 0.3s;
 
       .board {
         display: flex;
         flex-direction: column;
         padding: 5px;
-        // border-radius: 100px;
 
         .row {
           display: flex;
@@ -112,42 +126,57 @@ body {
             border-radius: 10px;
             background-color: wheat;
 
-            // &.2 {
-            //   background-color: wheat;
-            // }
-            // &.4 {
-            //   background-color: rgb(216, 183, 121);
-            // }
-            // &.8 {
-            //   background-color: rgb(140, 112, 60);
-            // }
-            // &.16 {
-            //   background-color: rgb(111, 101, 82);
-            // }
-            // &.32 {
-            //   background-color: rgb(75, 63, 39);
-            // }
-            // &.64 {
-            //   background-color: rgb(48, 37, 15);
-            // }
-            // &.128 {
-            //   background-color: rgb(84, 58, 6);
-            // }
-            // &.256 {
-            //   background-color: rgb(43, 30, 3);
-            // }
-            // &.512 {
-            //   background-color: rgb(63, 63, 63);
-            // }
-            // &.1024 {
-            //   background-color: rgb(72, 113, 55);
-            // }
-            // &.2048 {
-            //   background-color: rgb(133, 235, 90);
-            // }
+            &.t2 {
+              background-color: wheat;
+            }
+            &.t4 {
+              background-color: rgb(216, 183, 121);
+            }
+            &.t8 {
+              background-color: rgb(140, 112, 60);
+              color: white;
+            }
+            &.t16 {
+              background-color: rgb(111, 101, 82);
+            }
+            &.t32 {
+              background-color: rgb(75, 63, 39);
+            }
+            &.t64 {
+              background-color: rgb(48, 37, 15);
+            }
+            &.t128 {
+              background-color: rgb(84, 58, 6);
+            }
+            &.t256 {
+              background-color: rgb(43, 30, 3);
+            }
+            &.t512 {
+              background-color: rgb(63, 63, 63);
+            }
+            &.t1024 {
+              background-color: rgb(72, 113, 55);
+            }
+            &.t2048 {
+              background-color: rgb(133, 235, 90);
+            }
           }
         }
       }
+      &.play-screen {
+        transition: all 0.3s;
+        margin-right: -200%;
+      }
+    }
+    @include mobile {
+      // flex-direction: column;
+      // #score-container {
+      //   justify-content: center;
+      //   flex: 0.3;
+      // }
+      // #collapseBtn {
+      //   display: none;
+      // }
     }
   }
 }
@@ -162,11 +191,11 @@ body {
   }
   50% {
     background-color: rgba(255, 255, 255, 0.283);
-    box-shadow: rgba(255, 255, 255, 0.372) 200px 0px 0px;
+    box-shadow: rgba(255, 255, 255, 0.372) 400px 0px 0px;
   }
   100% {
     background-color: rgba(255, 255, 255, 0);
-    box-shadow: rgba(255, 255, 255, 0) 200px 0px 0px;
+    box-shadow: rgba(255, 255, 255, 0) 400px 0px 0px;
   }
 }
 @keyframes left {
@@ -179,11 +208,11 @@ body {
   }
   50% {
     background-color: rgba(255, 255, 255, 0.283);
-    box-shadow: rgba(255, 255, 255, 0.372) -200px 0px 0px;
+    box-shadow: rgba(255, 255, 255, 0.372) -400px 0px 0px;
   }
   100% {
     background-color: rgba(255, 255, 255, 0);
-    box-shadow: rgba(255, 255, 255, 0) -200px 0px 0px;
+    box-shadow: rgba(255, 255, 255, 0) -400px 0px 0px;
   }
 }
 
@@ -219,5 +248,20 @@ body {
   100% {
     background-color: rgba(255, 255, 255, 0);
     box-shadow: rgba(255, 255, 255, 0) 0px 200px 0px;
+  }
+}
+
+//Tile Animations
+@keyframes match {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: rgba(0, 0, 0, 0.475) 0 0 20px;
+    transform: scale(1.3);
+  }
+  100% {
+    box-shadow: rgba(255, 255, 255, 0) 0 0 20px;
+    transform: scale(1);
   }
 }
