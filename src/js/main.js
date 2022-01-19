@@ -44,37 +44,39 @@ const checkKey = e => {
   board.style.animation = null;
   e = e || window.event;
 
-  var matchedTiles = [];
+  var matched = {};
   if (e.keyCode == "38") {
-    matchedTiles = up(data);
+    matched = up(data);
     board.style.animation = "up 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "40") {
-    matchedTiles = down(data);
+    matched = down(data);
     board.style.animation = "down 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "37") {
-    matchedTiles = left(data);
+    matched = left(data);
     board.style.animation = "left 0.5s ease-in-out 0s 1 forwards";
   } else if (e.keyCode == "39") {
-    matchedTiles = right(data);
+    matched = right(data);
     board.style.animation = "right 0.5s ease-in-out 0s 1 forwards";
   }
 
-  if (matchedTiles.length > 0) {
+  console.log(matched);
+  //Generate a new tile if there is at least one matched tile
+  if (matched.didShift) {
     generateTile(data);
-    // TODO : KSH : 01/26/2022 : Generate New Tile on Board
     // TODO : KSH : 01/26/2022 : Check if the board is full and unplayable (You Lose)
   }
   rerenderBoard();
 
-  //Animate Matched Tiles
-  if (matchedTiles.length > 0) {
+  //Animate the matched tiles after the board has been rerendered
+  if (matched.tiles.length > 0) {
     console.log(matchedTiles);
 
-    matchedTiles.forEach(tile => {
+    matched.tiles.forEach(tile => {
       const matchedTile = document.getElementById(
         tile[0].toString() + tile[1].toString()
       );
       console.log(matchedTile);
+
       //trigger Animation Reflow
       matchedTile.style.animation = "none";
       matchedTile.offsetHeight;
@@ -91,6 +93,7 @@ document.getElementById("collapseBtn").onclick = () => {
   document.getElementById("score-container").classList.toggle("collapse");
 };
 
+//Initalize collapse play button click event listener
 document.getElementById("play-btn").onclick = () => {
   document.getElementById("board-container").classList.toggle("play-screen");
   document.getElementById("score-container").classList.toggle("play-screen");
