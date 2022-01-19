@@ -18,10 +18,9 @@ export const down = board => {
 export const left = board => {
   // Declare variables
   var shift = false;
-  var match = false;
   var repeated = false;
-
   var matchedTiles = [];
+  var didShift = false;
 
   // Use do...while() for a breakable "if" statement
   do {
@@ -38,6 +37,7 @@ export const left = board => {
             board[row][col - 1] = board[row][col];
             board[row][col] = 0;
             shift = true;
+            didShift = true;
           }
         }
       }
@@ -63,7 +63,7 @@ export const left = board => {
           board[row][col] = board[row][col] * 2;
           board[row][col + 1] = 0;
           matchedTiles.push([row, col]);
-          match = true;
+          didShift = true;
         }
       }
     }
@@ -73,7 +73,7 @@ export const left = board => {
   } while (repeated); // End while() when broken prematurely
 
   // Return whether or not a successful match has been made
-  return matchedTiles;
+  return { tiles: matchedTiles, didShift };
 };
 
 /***********************
@@ -85,8 +85,9 @@ export const left = board => {
 export const right = board => {
   // Declare variables
   var shift = false;
-  var match = false;
+  var matchedTiles = [];
   var repeated = false;
+  var didShift;
 
   // Use do...while() for a breakable "if" statement
   do {
@@ -103,6 +104,7 @@ export const right = board => {
             board[row][col + 1] = board[row][col];
             board[row][col] = 0;
             shift = true;
+            didShift = true;
           }
         }
       }
@@ -127,7 +129,8 @@ export const right = board => {
         if (board[row][col - 1] === board[row][col] && board[row][col] !== 0) {
           board[row][col] = board[row][col] * 2;
           board[row][col - 1] = 0;
-          match = true;
+          matchedTiles.push([row, col]);
+          didShift = true;
         }
       }
     }
@@ -137,8 +140,9 @@ export const right = board => {
   } while (repeated); // End while() when broken prematurely
 
   // Return whether or not a successful match has been made
-  return match;
+  return { tiles: matchedTiles, didShift };
 };
+
 export const generateTile = board => {
   //Loop throught the board and record all blank tiles and their positions
   var blanks = [];
@@ -152,7 +156,9 @@ export const generateTile = board => {
   var randomValue = getRandomInt(0, blanks.length - 1);
 
   //Set the blank tile in the position corresponding to that random value equal to either 2 or a 4
-  board[blanks[randomValue][0]][blanks[randomValue][1]] = probability(0.5) ? 2 : 4;
+  board[blanks[randomValue][0]][blanks[randomValue][1]] = probability(0.5)
+    ? 2
+    : 4;
 };
 
 const getRandomInt = (min, max) => {
@@ -162,5 +168,5 @@ const getRandomInt = (min, max) => {
 };
 
 var probability = function (n) {
-  return (Math.random() <= parseFloat(n || 0.5)); // Generate # between 0 and 1, check less than given integer or 0.5
+  return !!n && Math.random() <= n;
 };

@@ -75,6 +75,7 @@ const checkKey = e => {
       const matchedTile = document.getElementById(
         tile[0].toString() + tile[1].toString()
       );
+
       console.log(matchedTile);
 
       //trigger Animation Reflow
