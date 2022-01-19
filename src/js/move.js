@@ -4,9 +4,63 @@ export const up = board => {
   return match;
 };
 export const down = board => {
-  console.log("down");
+  var shift = false;
   var match = false;
-  return match;
+  var repeated = false;
+
+  var matchedTiles = [];
+
+  // Use do...while() for a breakable "if" statement
+  do {
+    // Run through each available row
+    for (var col = 0; col < board.length; col++) {
+      // Shift the available values down
+      shift = true;
+      while (shift) {
+        // Iterate through each column checking the value next to it
+        shift = false;
+        for (var row = 1; row < board[col].length; row++) {
+          // Check if the column below is empty and above is not-empty
+          if (board[row + 1][col] === 0 && board[row][col] !== 0) {
+            board[row + 1][col] = board[row][col];
+            board[row][col] = 0;
+            shift = true;
+          }
+        }
+      }
+    }
+
+    // Break from do...while() when loop has repeated
+    if (repeated) {
+      repeated = false;
+      break;
+    }
+
+    // Match the values
+    for (var col = 0; col < board.length; col++) {
+      // Match each row by the value below
+      for (var row = 0; row < board.length - 1; row++) {
+        // Validate the next row exists
+        if (row + 1 === 4) {
+          break;
+        }
+
+        // Do comparisons using [col + 1] for previous element
+        if (board[row - 1][col] === board[row][col] && board[row][col] !== 0) {
+          board[row][col] = board[row][col] * 2;
+          board[row - 1][col] = 0;
+          matchedTiles.push([row, col]);
+          match = true;
+        }
+      }
+    }
+
+    // Repeat run when fully executed
+    repeated = true;
+  } while (repeated); // End while() when broken prematurely
+
+  // Return whether or not a successful match has been made
+  return matchedTiles;
 };
 
 /***********************
