@@ -156,9 +156,7 @@ export const generateTile = board => {
   var randomValue = getRandomInt(0, blanks.length - 1);
 
   //Set the blank tile in the position corresponding to that random value equal to either 2 or a 4
-  board[blanks[randomValue][0]][blanks[randomValue][1]] = probability(0.5)
-    ? 2
-    : 4;
+  board[blanks[randomValue][0]][blanks[randomValue][1]] = probability(0.5) ? 2 : 4;
 };
 
 const getRandomInt = (min, max) => {
@@ -168,5 +166,5 @@ const getRandomInt = (min, max) => {
 };
 
 var probability = function (n) {
-  return !!n && Math.random() <= n;
+  return (Math.random() <= parseFloat(n || 0.5)); // Generate # between 0 and 1, check less than given integer or 0.5
 };
