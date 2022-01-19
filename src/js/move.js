@@ -170,5 +170,5 @@ const getRandomInt = (min, max) => {
 };
 
 var probability = function (n) {
-  return !!n && Math.random() <= n;
+  return Math.random() <= parseFloat(n || 0.5); // Generate # between 0 and 1, check less than given integer or 0.5
 };
