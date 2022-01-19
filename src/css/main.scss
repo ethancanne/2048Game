@@ -15,16 +15,17 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     height: 100vh;
     background-color: $board-color;
 
-    #score-container {
+    #side-container {
       flex: 0.5;
       display: flex;
       justify-content: right;
       align-items: center;
       transition: all 0.5s ease-in-out;
-      height: 100%;
+      height: 100vh;
       width: 100%;
       padding: 20px;
       background-color: rgba(255, 255, 255);
@@ -38,15 +39,31 @@ body {
         min-height: 400px;
         min-width: 400px;
 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
         width: 40%;
-        #play-btn {
-          background-color: whitesmoke;
-          border: none;
-          font-size: 30px;
-          padding: 20px;
-          margin: 20px;
-          display: none;
-          cursor: pointer;
+        .buttons {
+          button {
+            border: none;
+            font-size: 30px;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.084);
+          }
+
+          #play-btn {
+            background-color: whitesmoke;
+            display: none;
+          }
+          #end-btn {
+            background-color: rgba(189, 66, 66, 0.529);
+            color: white;
+          }
         }
 
         .title {
@@ -56,12 +73,30 @@ body {
           color: gray;
           text-align: center;
         }
-        .score {
-          padding: 20px;
-          text-align: center;
-          margin: 20px 0 20px 0;
-          font-size: 40px;
+        .score-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+
+          background-color: whitesmoke;
+          padding: 0 20px 0 20px;
+          margin: 50px 0 50px 0;
+          height: 90px;
+          p {
+            color: rgb(150, 150, 150);
+            font-size: 20px;
+          }
+          #score {
+            margin-left: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0 20px 0;
+            font-size: 40px;
+            font-weight: 900;
+          }
         }
+
         #collapseBtn {
           position: absolute;
           color: white;
@@ -87,8 +122,16 @@ body {
       }
       &.play-screen {
         justify-content: center;
-        #play-btn {
-          display: inline;
+        .score-container {
+          display: none;
+        }
+        .buttons {
+          #play-btn {
+            display: inline;
+          }
+          #end-btn {
+            display: none;
+          }
         }
       }
     }
@@ -123,12 +166,12 @@ body {
 
             width: 90px;
             height: 90px;
-            margin: 5px;
+            margin: 10px;
             border-radius: 10px;
             background-color: wheat;
 
             &.t2 {
-              background-color: wheat;
+              background-color: rgb(237, 220, 193);
             }
             &.t4 {
               background-color: rgb(216, 183, 121);
@@ -139,6 +182,7 @@ body {
             }
             &.t16 {
               background-color: rgb(111, 101, 82);
+              color: white;
             }
             &.t32 {
               background-color: rgb(75, 63, 39);
@@ -170,14 +214,46 @@ body {
       }
     }
     @include mobile {
-      // flex-direction: column;
-      // #score-container {
-      //   justify-content: center;
-      //   flex: 0.3;
-      // }
-      // #collapseBtn {
-      //   display: none;
-      // }
+      #side-container {
+        display: block;
+        position: absolute;
+        right: 100%;
+
+        .score-container {
+          display: block;
+
+          position: fixed;
+          top: -20px;
+          right: 30px;
+        }
+        .options {
+          #collapseBtn {
+            display: none;
+          }
+        }
+        &.play-screen {
+          display: flex;
+          flex: 1;
+          right: 0;
+          padding: 0;
+        }
+
+        #end-btn {
+          position: fixed;
+          bottom: 20px;
+          left: calc(50% - 60px);
+          transform: translateX(calc(50% - 60px));
+        }
+      }
+      #board-container {
+        .board {
+          .row {
+            .tile {
+              margin: 2px;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -263,6 +339,29 @@ body {
   }
   100% {
     box-shadow: rgba(255, 255, 255, 0) 0 0 20px;
+    transform: scale(1);
+  }
+}
+
+//Tile Animations
+@keyframes new {
+  0% {
+    transform: scale(0.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+//Tile Animations
+@keyframes addScore {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
     transform: scale(1);
   }
 }

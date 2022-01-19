@@ -144,7 +144,7 @@ export const right = board => {
 };
 
 export const generateTile = board => {
-  //Loop throught the board and record all blank tiles and their positions
+  //Loop through the board and record all blank tiles and their positions
   var blanks = [];
   board.forEach((row, i) => {
     row.forEach((tile, j) => {
@@ -159,6 +159,8 @@ export const generateTile = board => {
   board[blanks[randomValue][0]][blanks[randomValue][1]] = probability(0.5)
     ? 2
     : 4;
+
+  return [blanks[randomValue][0], blanks[randomValue][1]];
 };
 
 const getRandomInt = (min, max) => {

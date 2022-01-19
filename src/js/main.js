@@ -1,16 +1,31 @@
 import { right, left, up, down, generateTile } from "./move";
-const data = [
-  [2, 2, 0, 0],
-  [0, 2, 0, 0],
-  [0, 2, 0, 0],
-  [0, 4, 4, 0],
+var data = [
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
 ];
 
 const board = document.getElementsByClassName("board")[0];
+var score = 0;
+
+const restartGame = () => {
+  data = [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ];
+  generateTile(data);
+  rerenderBoard(data);
+  score = 0;
+  document.getElementById("score").textContent = score;
+  document.getElementById("board-container").classList.add("play-screen");
+  document.getElementById("side-container").classList.add("play-screen");
+};
 
 window.onload = () => {
-  document.getElementById("board-container").classList.toggle("play-screen");
-  document.getElementById("score-container").classList.toggle("play-screen");
+  restartGame();
 };
 
 // Render the board from the data array
@@ -39,9 +54,12 @@ rerenderBoard();
 
 //Initalize arrow key event listeners
 const checkKey = e => {
+  //Reflow the animations
   board.style.animation = "none";
-  board.offsetHeight; /* trigger reflow */
+  board.offsetHeight;
   board.style.animation = null;
+
+  //Grab the event with the key code
   e = e || window.event;
 
   var matched = {};
@@ -60,25 +78,49 @@ const checkKey = e => {
   }
 
   console.log(matched);
-  //Generate a new tile if there is at least one matched tile
+
+  //Generate a new tile if there was any shift
   if (matched.didShift) {
-    generateTile(data);
-    // TODO : KSH : 01/26/2022 : Check if the board is full and unplayable (You Lose)
+    const newTilePos = generateTile(data);
+    rerenderBoard();
+
+    const newTileObj = document.getElementById(
+      newTilePos[0].toString() + newTilePos[1].toString()
+    );
+
+    //Trigger Animation Reflow
+    newTileObj.style.animation = "none";
+    newTileObj.offsetHeight;
+    newTileObj.style.animation = null;
+
+    //Apply the animation to the newly generated tile
+    newTileObj.style.animation = "new 0.3s ease-in-out 0s 1 forwards";
   }
-  rerenderBoard();
+
+  // TODO : KSH : 01/26/2022 : Check if the board is full and unplayable (You Lose)
 
   //Animate the matched tiles after the board has been rerendered
+  //Add to the score
   if (matched.tiles.length > 0) {
-    console.log(matchedTiles);
-
     matched.tiles.forEach(tile => {
       const matchedTile = document.getElementById(
         tile[0].toString() + tile[1].toString()
       );
+      score += parseInt(matchedTile.textContent);
+      const scoreTxtObj = document.getElementById("score");
+      scoreTxtObj.textContent = score;
 
-      console.log(matchedTile);
+      //TRIGGER ANIMATIONS:
 
-      //trigger Animation Reflow
+      //Trigger Score Text Animation Reflow
+      scoreTxtObj.style.animation = "none";
+      scoreTxtObj.offsetHeight;
+      scoreTxtObj.style.animation = null;
+
+      //Apply the animation to Score Text
+      scoreTxtObj.style.animation = "addScore 0.5s ease-in-out 0s 1 forwards";
+
+      //Trigger Animation Reflow for the matched tile
       matchedTile.style.animation = "none";
       matchedTile.offsetHeight;
       matchedTile.style.animation = null;
@@ -91,12 +133,17 @@ const checkKey = e => {
 
 //Initalize collapse button click event listener
 document.getElementById("collapseBtn").onclick = () => {
-  document.getElementById("score-container").classList.toggle("collapse");
+  document.getElementById("side-container").classList.toggle("collapse");
 };
 
-//Initalize collapse play button click event listener
+//Initalize play button click event listener
 document.getElementById("play-btn").onclick = () => {
-  document.getElementById("board-container").classList.toggle("play-screen");
-  document.getElementById("score-container").classList.toggle("play-screen");
+  document.getElementById("board-container").classList.remove("play-screen");
+  document.getElementById("side-container").classList.remove("play-screen");
   document.onkeydown = checkKey;
+};
+
+//Initalize end button click event listener
+document.getElementById("end-btn").onclick = () => {
+  restartGame();
 };
