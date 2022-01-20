@@ -1,12 +1,16 @@
 export const up = board => {
-  console.log("up");
-  var match = false;
-  return match;
+  var matchedTiles = []
+  var didShift = false;
+
+  // Return whether or not a successful match has been made
+  return { tiles: matchedTiles, didShift };
 };
 export const down = board => {
-  console.log("down");
-  var match = false;
-  return match;
+  var matchedTiles = []
+  var didShift = false;
+
+  // Return whether or not a successful match has been made
+  return { tiles: matchedTiles, didShift };
 };
 
 /***********************
@@ -87,7 +91,7 @@ export const right = board => {
   var shift = false;
   var matchedTiles = [];
   var repeated = false;
-  var didShift;
+  var didShift = false;
 
   // Use do...while() for a breakable "if" statement
   do {
@@ -163,12 +167,72 @@ export const generateTile = board => {
   return [blanks[randomValue][0], blanks[randomValue][1]];
 };
 
+export const validateBoard = board => {
+  // Assume user can't move
+  var safe = false;
+
+  var value = 0;
+  for(var row = 0; row < board.length; row++)
+  {
+    for(var col = 0; col < board[row].length; col++)
+    {
+      // Set the current value
+      value = board[row][col];
+
+      // Check if the current value is 0 (can still move)
+      safe = (value === 0);
+      if(safe)
+      {
+        break;
+      }
+
+      // Check the "above" row
+      if(row - 1 !== -1)
+      {
+        safe |= (board[row - 1][col] === value)
+      }
+
+      // Check the "below" row
+      if(row + 1 !== 4)
+      {
+        safe |= (board[row + 1][col] === value);
+      }
+
+      // Check the "left" column
+      if(col - 1 !== -1)
+      {
+        safe |= (board[row][col - 1] === value);
+      }
+
+      // Check the "right" column
+      if(col + 1 !== 4)
+      {
+        safe |= (board[row][col + 1] === value);
+      }
+
+      // If a valid value is found, exit
+      if(safe)
+      {
+        break;
+      }
+    }
+
+    if(safe)
+    {
+      break;
+    }
+  }
+
+  return safe;
+}
+
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+// Generate # between 0 and 1, check less than given integer or 0.5
 var probability = function (n) {
-  return Math.random() <= parseFloat(n || 0.5); // Generate # between 0 and 1, check less than given integer or 0.5
+  return Math.random() <= parseFloat(n || 0.5);
 };
