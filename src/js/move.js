@@ -11,6 +11,7 @@ export const down = board => {
 
   // Return whether or not a successful match has been made
   return { tiles: matchedTiles, didShift };
+  //down comment
 };
 
 /***********************
