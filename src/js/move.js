@@ -1,12 +1,12 @@
 export const up = board => {
-  var matchedTiles = []
+  var matchedTiles = [];
   var didShift = false;
 
   // Return whether or not a successful match has been made
   return { tiles: matchedTiles, didShift };
 };
 export const down = board => {
-  var matchedTiles = []
+  var matchedTiles = [];
   var didShift = false;
 
   // Return whether or not a successful match has been made
@@ -172,59 +172,50 @@ export const validateBoard = board => {
   var safe = false;
 
   var value = 0;
-  for(var row = 0; row < board.length; row++)
-  {
-    for(var col = 0; col < board[row].length; col++)
-    {
+  for (var row = 0; row < board.length; row++) {
+    for (var col = 0; col < board[row].length; col++) {
       // Set the current value
       value = board[row][col];
 
       // Check if the current value is 0 (can still move)
-      safe = (value === 0);
-      if(safe)
-      {
+      safe = value === 0;
+      if (safe) {
         break;
       }
 
       // Check the "above" row
-      if(row - 1 !== -1)
-      {
-        safe |= (board[row - 1][col] === value)
+      if (row - 1 !== -1) {
+        safe |= board[row - 1][col] === value;
       }
 
       // Check the "below" row
-      if(row + 1 !== 4)
-      {
-        safe |= (board[row + 1][col] === value);
+      if (row + 1 !== 4) {
+        safe |= board[row + 1][col] === value;
       }
 
       // Check the "left" column
-      if(col - 1 !== -1)
-      {
-        safe |= (board[row][col - 1] === value);
+      if (col - 1 !== -1) {
+        safe |= board[row][col - 1] === value;
       }
 
       // Check the "right" column
-      if(col + 1 !== 4)
-      {
-        safe |= (board[row][col + 1] === value);
+      if (col + 1 !== 4) {
+        safe |= board[row][col + 1] === value;
       }
 
       // If a valid value is found, exit
-      if(safe)
-      {
+      if (safe) {
         break;
       }
     }
 
-    if(safe)
-    {
+    if (safe) {
       break;
     }
   }
 
   return safe;
-}
+};
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
