@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="stylesheet" href="css/main.scss" />
     <link
@@ -17,13 +17,19 @@
   </head>
   <body>
     <div id="app">
-      <div id="score-container">
+      <div id="side-container">
         <div class="options">
           <div class="title">
             <h1>The tile game</h1>
-            <button id="play-btn">Play</button>
           </div>
-          <div class="score">5</div>
+          <div class="score-container">
+            <p>Score:</p>
+            <div id="score">0</div>
+          </div>
+          <div class="buttons">
+            <button id="play-btn">Play</button>
+            <button id="end-btn">End</button>
+          </div>
           <button id="collapseBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
       </div>
@@ -32,5 +38,6 @@
       </div>
     </div>
     <script src="js/main.js" type="module"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>

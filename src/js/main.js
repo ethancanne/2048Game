@@ -1,16 +1,46 @@
-import { right, left, up, down, generateTile } from "./move";
-const data = [
-  [2, 2, 0, 0],
-  [0, 2, 0, 0],
-  [0, 2, 0, 0],
-  [0, 4, 4, 0],
+import { right, left, up, down, generateTile, validateBoard } from "./move";
+var data = [
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
 ];
 
 const board = document.getElementsByClassName("board")[0];
+var score = 0;
 
+// Basic function to restart the game for a new playthrough
+const restartGame = () => {
+  score = 0;
+  data = [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ];
+  generateTile(data);
+  rerenderBoard(data);
+  document.getElementById("score").textContent = score;
+  document.getElementById("board-container").classList.add("play-screen");
+  document.getElementById("side-container").classList.add("play-screen");
+};
+
+// Restart the game as the page loads
 window.onload = () => {
-  document.getElementById("board-container").classList.toggle("play-screen");
-  document.getElementById("score-container").classList.toggle("play-screen");
+  restartGame();
+};
+
+// TODO : 01/19/2022 : Replace with a more elequent message
+const loseGame = () => {
+  Swal.fire({
+    title: "You Lose",
+    confirmButtonText: "Restart",
+  }).then(result => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      restartGame();
+    }
+  });
 };
 
 // Render the board from the data array
@@ -24,10 +54,10 @@ const rerenderBoard = () => {
       const tile = document.createElement("div");
       tile.textContent = item !== 0 ? item : "";
 
-      //Set id to the tile's position for reference
+      // Set id to the tile's position for reference
       tile.id = i.toString() + j.toString();
 
-      //Set class name to the tile's value for appropriate styling
+      // Set class name to the tile's value for appropriate styling
       tile.className = "tile t" + tile.textContent;
 
       rowElement.appendChild(tile);
@@ -35,67 +65,106 @@ const rerenderBoard = () => {
     board.appendChild(rowElement);
   });
 };
-rerenderBoard();
 
-//Initalize arrow key event listeners
+// Initalize arrow key event listeners
 const checkKey = e => {
+  // Reflow the animations
   board.style.animation = "none";
-  board.offsetHeight; /* trigger reflow */
+  board.offsetHeight;
   board.style.animation = null;
+
+  // Grab the event with the key code
   e = e || window.event;
+  e.keyCode = parseInt(e.keyCode);
+
+  // Return if invalid arrow key
+  if (e.keyCode < 37 || e.keyCode > 41) return;
 
   var matched = {};
-  if (e.keyCode == "38") {
+  if (e.keyCode == 38) {
     matched = up(data);
     board.style.animation = "up 0.5s ease-in-out 0s 1 forwards";
-  } else if (e.keyCode == "40") {
+  } else if (e.keyCode == 40) {
     matched = down(data);
     board.style.animation = "down 0.5s ease-in-out 0s 1 forwards";
-  } else if (e.keyCode == "37") {
+  } else if (e.keyCode == 37) {
     matched = left(data);
     board.style.animation = "left 0.5s ease-in-out 0s 1 forwards";
-  } else if (e.keyCode == "39") {
+  } else if (e.keyCode == 39) {
     matched = right(data);
     board.style.animation = "right 0.5s ease-in-out 0s 1 forwards";
   }
 
-  console.log(matched);
-  //Generate a new tile if there is at least one matched tile
+  // Generate a new tile if there was any shift
   if (matched.didShift) {
-    generateTile(data);
-    // TODO : KSH : 01/26/2022 : Check if the board is full and unplayable (You Lose)
+    const newTilePos = generateTile(data);
+    rerenderBoard();
+
+    const newTileObj = document.getElementById(
+      newTilePos[0].toString() + newTilePos[1].toString()
+    );
+
+    // Trigger Animation Reflow
+    newTileObj.style.animation = "none";
+    newTileObj.offsetHeight;
+    newTileObj.style.animation = null;
+
+    // Apply the animation to the newly generated tile
+    newTileObj.style.animation = "new 0.3s ease-in-out 0s 1 forwards";
   }
-  rerenderBoard();
 
-  //Animate the matched tiles after the board has been rerendered
+  // Animate the matched tiles after the board has been rerendered
+  // Add to the score
   if (matched.tiles.length > 0) {
-    console.log(matchedTiles);
-
     matched.tiles.forEach(tile => {
+      //Get tile DOM Elements
       const matchedTile = document.getElementById(
         tile[0].toString() + tile[1].toString()
       );
-      console.log(matchedTile);
 
-      //trigger Animation Reflow
+      //Add to the score variable and set that value to the text content of the score text DOM element
+      score += parseInt(matchedTile.textContent);
+      const scoreTxtObj = document.getElementById("score");
+      scoreTxtObj.textContent = score;
+
+      // TRIGGER ANIMATIONS:
+      // Trigger Score Text Animation Reflow
+      scoreTxtObj.style.animation = "none";
+      scoreTxtObj.offsetHeight;
+      scoreTxtObj.style.animation = null;
+
+      // Apply the animation to Score Text
+      scoreTxtObj.style.animation = "addScore 0.5s ease-in-out 0s 1 forwards";
+
+      // Trigger Animation Reflow for the matched tile
       matchedTile.style.animation = "none";
       matchedTile.offsetHeight;
       matchedTile.style.animation = null;
 
-      //Apply the animation to the matched tiles
+      // Apply the animation to the matched tiles
       matchedTile.style.animation = "match 0.5s ease-in-out 0s 1 forwards";
     });
   }
+
+  // If board is no longer valid, alert the user asynchronously
+  if (!validateBoard(data)) {
+    setTimeout(loseGame, 1000);
+  }
 };
 
-//Initalize collapse button click event listener
+// Initalize collapse button click event listener
 document.getElementById("collapseBtn").onclick = () => {
-  document.getElementById("score-container").classList.toggle("collapse");
+  document.getElementById("side-container").classList.toggle("collapse");
 };
 
-//Initalize collapse play button click event listener
+// Initalize play button click event listener
 document.getElementById("play-btn").onclick = () => {
-  document.getElementById("board-container").classList.toggle("play-screen");
-  document.getElementById("score-container").classList.toggle("play-screen");
+  document.getElementById("board-container").classList.remove("play-screen");
+  document.getElementById("side-container").classList.remove("play-screen");
   document.onkeydown = checkKey;
+};
+
+// Initalize end button click event listener
+document.getElementById("end-btn").onclick = () => {
+  restartGame();
 };
