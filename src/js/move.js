@@ -58,11 +58,6 @@ export const left = board => {
     for (var row = 0; row < board.length; row++) {
       // Match each column by the value to the left
       for (var col = 0; col < board.length - 1; col++) {
-        // Validate the next column exists
-        if (col + 1 === 4) {
-          break;
-        }
-
         // Do comparisons using [col + 1] for previous element
         if (board[row][col + 1] === board[row][col] && board[row][col] !== 0) {
           board[row][col] = board[row][col] * 2;
@@ -172,46 +167,38 @@ export const validateBoard = board => {
   // Assume user can't move
   var safe = false;
 
+  // Loop through each index of the board and check if a match can be made
   var value = 0;
-  for (var row = 0; row < board.length; row++) {
-    for (var col = 0; col < board[row].length; col++) {
+  for (var row = 0; !safe && (row < board.length); row++) {
+    for (var col = 0; !safe && (col < board[row].length); col++) {
       // Set the current value
       value = board[row][col];
 
       // Check if the current value is 0 (can still move)
-      safe = value === 0;
+      safe = (value === 0);
       if (safe) {
         break;
       }
 
       // Check the "above" row
       if (row - 1 !== -1) {
-        safe |= board[row - 1][col] === value;
+        safe = safe || (board[row - 1][col] === value);
       }
 
       // Check the "below" row
-      if (row + 1 !== 4) {
-        safe |= board[row + 1][col] === value;
+      if (row + 1 !== board.length) {
+        safe = safe || (board[row + 1][col] === value);
       }
 
       // Check the "left" column
       if (col - 1 !== -1) {
-        safe |= board[row][col - 1] === value;
+        safe = safe || (board[row][col - 1] === value);
       }
 
       // Check the "right" column
-      if (col + 1 !== 4) {
-        safe |= board[row][col + 1] === value;
+      if (col + 1 !== board[row].length) {
+        safe = safe || (board[row][col + 1] === value);
       }
-
-      // If a valid value is found, exit
-      if (safe) {
-        break;
-      }
-    }
-
-    if (safe) {
-      break;
     }
   }
 

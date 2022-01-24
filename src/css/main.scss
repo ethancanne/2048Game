@@ -26,7 +26,7 @@ body {
       justify-content: right;
       align-items: center;
       transition: all 0.5s ease-in-out;
-      height: 100vh;
+      height: 100%;
       width: 100%;
       padding: 20px;
       background-color: rgba(255, 255, 255);
@@ -45,25 +45,58 @@ body {
         justify-content: center;
         flex-direction: column;
 
-        width: 40%;
         .buttons {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
           button {
             border: none;
             font-size: 30px;
             padding: 20px;
             margin: 20px;
-            border-radius: 10px;
+            border-radius: 4px;
             cursor: pointer;
-            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.084);
+            box-shadow: 0px 0px 5px rgba(97, 97, 97, 0.187);
+            color: white;
+            transition: all 0.2s;
+          }
+          button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 10px rgba(97, 97, 97, 0.548);
           }
 
           .play-btn {
-            background-color: whitesmoke;
+            background-color: rgb(106, 140, 94);
             display: none;
           }
+
           #end-btn {
             background-color: rgba(189, 66, 66, 0.529);
-            color: white;
+          }
+
+          #layout {
+            display: none;
+            flex-direction: row;
+            margin: 20px;
+            align-content: center;
+            justify-content: center;
+            background-color: rgba(245, 245, 245, 0.365);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.151);
+
+            #layoutTxt {
+              padding: 20px;
+              font-size: 20px;
+              width: 50px;
+              background-color: whitesmoke;
+              border: none;
+              text-align: center;
+            }
+            p {
+              padding: 19px 10px 10px 10px;
+              text-align: center;
+              font-weight: 500;
+            }
           }
         }
 
@@ -133,6 +166,9 @@ body {
           #end-btn {
             display: none;
           }
+          #layout {
+            display: flex;
+          }
         }
       }
     }
@@ -146,14 +182,20 @@ body {
       height: 100%;
       transition: all 0.3s;
 
+      overflow: auto;
+
       .board {
         display: flex;
         flex-direction: column;
         padding: 5px;
+        max-height: 100%;
+        max-width: 100%;
+        overflow: auto;
 
         .row {
           display: flex;
           flex-direction: row;
+
           .tile {
             display: flex;
             align-items: center;
@@ -165,8 +207,10 @@ body {
             font-size: 50px;
             font-weight: bolder;
 
-            width: 90px;
-            height: 90px;
+            min-width: 90px;
+            min-height: 90px;
+            width: auto;
+            height: auto;
             margin: 10px;
             border-radius: 10px;
             background-color: wheat;
@@ -187,24 +231,31 @@ body {
             }
             &.t32 {
               background-color: rgb(75, 63, 39);
+              color: white;
             }
             &.t64 {
               background-color: rgb(48, 37, 15);
+              color: white;
             }
             &.t128 {
               background-color: rgb(84, 58, 6);
+              color: white;
             }
             &.t256 {
               background-color: rgb(43, 30, 3);
+              color: white;
             }
             &.t512 {
               background-color: rgb(63, 63, 63);
+              color: white;
             }
             &.t1024 {
               background-color: rgb(72, 113, 55);
+              color: white;
             }
             &.t2048 {
               background-color: rgb(133, 235, 90);
+              color: white;
             }
           }
         }
