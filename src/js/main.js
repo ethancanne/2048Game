@@ -123,7 +123,7 @@ const checkKey = e => {
       );
 
       //Add to the score variable and set that value to the text content of the score text DOM element
-      score += parseInt(matchedTile.textContent);
+      score += parseInt(matchedTile.textContent || 0);
       const scoreTxtObj = document.getElementById("score");
       scoreTxtObj.textContent = score;
 
