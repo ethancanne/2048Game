@@ -57,7 +57,7 @@ body {
             box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.084);
           }
 
-          #play-btn {
+          .play-btn {
             background-color: whitesmoke;
             display: none;
           }
@@ -127,7 +127,7 @@ body {
           display: none;
         }
         .buttons {
-          #play-btn {
+          .play-btn {
             display: inline;
           }
           #end-btn {

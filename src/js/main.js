@@ -10,16 +10,8 @@ const board = document.getElementsByClassName("board")[0];
 var score = 0;
 
 // Basic function to restart the game for a new playthrough
-const restartGame = () => {
+const restartGame = selectedData => {
   score = 0;
-  data = [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ];
-  generateTile(data);
-  rerenderBoard(data);
   document.getElementById("score").textContent = score;
   document.getElementById("board-container").classList.add("play-screen");
   document.getElementById("side-container").classList.add("play-screen");
@@ -36,7 +28,6 @@ const loseGame = () => {
     title: "You Lose",
     confirmButtonText: "Restart",
   }).then(result => {
-    /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
       restartGame();
     }
@@ -123,7 +114,8 @@ const checkKey = e => {
       );
 
       //Add to the score variable and set that value to the text content of the score text DOM element
-      score += parseInt(matchedTile.textContent);
+
+      score += parseInt(matchedTile.textContent || 0);
       const scoreTxtObj = document.getElementById("score");
       scoreTxtObj.textContent = score;
 
@@ -159,9 +151,26 @@ document.getElementById("collapseBtn").onclick = () => {
 
 // Initalize play button click event listener
 document.getElementById("play-btn").onclick = () => {
+  const layout = parseInt(document.getElementById("layout").value);
+  var customBoard = [];
+  for (var i = 0; i < layout; i++) {
+    customBoard.push([]);
+    for (var j = 0; j < layout; j++) {
+      customBoard[i].push(0);
+    }
+  }
+
+  console.log(customBoard);
+  setBoard(customBoard);
+};
+
+const setBoard = selectedLayout => {
+  data = selectedLayout;
   document.getElementById("board-container").classList.remove("play-screen");
   document.getElementById("side-container").classList.remove("play-screen");
   document.onkeydown = checkKey;
+  generateTile(data);
+  rerenderBoard(data);
 };
 
 // Initalize end button click event listener
