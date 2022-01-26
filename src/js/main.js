@@ -67,7 +67,6 @@ const rerenderBoard = () => {
 const checkKey = e => {
   // Reflow the animations
   triggerReflow(board);
-
   // Grab the event with the key code
   e = e || window.event;
   e.keyCode = parseInt(e.keyCode);
@@ -80,13 +79,13 @@ const checkKey = e => {
   board.style.animation = direction + " 0.5s ease-in-out 0s 1 forwards";
 
   var matched = {};
-  if (e.keyCode == 37) {
+  if (e.keyCode == 37 || e.detail.dir === "left") {
     matched = left(data);
-  } else if (e.keyCode == 38) {
+  } else if (e.keyCode == 38 || e.detail.dir === "up") {
     matched = up(data);
-  } else if (e.keyCode == 39) {
+  } else if (e.keyCode == 39 || e.detail.dir === "right") {
     matched = right(data);
-  } else if (e.keyCode == 40) {
+  } else if (e.keyCode == 40 || e.detail.dir === "down") {
     matched = down(data);
   }
 
@@ -109,29 +108,30 @@ const checkKey = e => {
   if (matched.tiles.length > 0) {
     // Get tile DOM Elements
     matched.tiles.forEach(tile => {
-      //Get tile DOM Elements
-      const matchedTile = document.getElementById(
-        tile[0].toString() + tile[1].toString()
-      );
+      if (data[tile[0]][tile[1]] !== 0) {
+        //Get tile DOM Elements
+        const matchedTile = document.getElementById(
+          tile[0].toString() + tile[1].toString()
+        );
 
-      //Add to the score variable and set that value to the text content of the score text DOM element
+        //Add to the score variable and set that value to the text content of the score text DOM element
+        score += parseInt(matchedTile.textContent || 0);
+        const scoreTxtObj = document.getElementById("score");
 
-      score += parseInt(matchedTile.textContent || 0);
-      const scoreTxtObj = document.getElementById("score");
+        // Add to the score variable and set that value to the text content of the score text DOM element
+        score += !isNaN(parseInt(matchedTile.textContent))
+          ? parseInt(matchedTile.textContent)
+          : 0;
+        scoreTxtObj.textContent = score;
 
-      // Add to the score variable and set that value to the text content of the score text DOM element
-      score += !isNaN(parseInt(matchedTile.textContent))
-        ? parseInt(matchedTile.textContent)
-        : 0;
-      scoreTxtObj.textContent = score;
+        // Animation reflow and apply the animation to Score Text
+        triggerReflow(scoreTxtObj);
+        scoreTxtObj.style.animation = "addScore 0.5s ease-in-out 0s 1 forwards";
 
-      // Animation reflow and apply the animation to Score Text
-      triggerReflow(scoreTxtObj);
-      scoreTxtObj.style.animation = "addScore 0.5s ease-in-out 0s 1 forwards";
-
-      // Animation reflow and apply the animation to the matched tiles
-      triggerReflow(matchedTile);
-      matchedTile.style.animation = "match 0.5s ease-in-out 0s 1 forwards";
+        // Animation reflow and apply the animation to the matched tiles
+        triggerReflow(matchedTile);
+        matchedTile.style.animation = "match 0.5s ease-in-out 0s 1 forwards";
+      }
     });
   }
 
@@ -188,6 +188,11 @@ const setBoard = selectedLayout => {
   document.getElementById("board-container").classList.remove("play-screen");
   document.getElementById("side-container").classList.remove("play-screen");
   document.onkeydown = checkKey;
+  document.addEventListener("swiped-left", checkKey);
+  document.addEventListener("swiped-right", checkKey);
+  document.addEventListener("swiped-up", checkKey);
+  document.addEventListener("swiped-down", checkKey);
+
   generateTile(data);
   rerenderBoard(data);
 };

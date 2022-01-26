@@ -1,17 +1,127 @@
+/***********************
+ * Shift values up
+ * Match values
+ * Shift values up
+ **********************/
 export const up = board => {
+  // Declare variables
+  var shift = false;
+  var repeated = false;
   var matchedTiles = [];
   var didShift = false;
 
+  // Use do...while() for a breakable "if" statement
+  do {
+    // Run through each available column
+    for (var col = 0; col < board.length; col++) {
+      // Shift the available values down
+      shift = true;
+      while (shift) {
+        // Iterate through each row (top to bottom) checking the value above to it
+        shift = false;
+        for (var row = 0; row < board.length - 1; row++) {
+          // Check if this tile is empty and the one below it is not-empty
+          if (board[row][col] === 0 && board[row + 1][col] !== 0) {
+            board[row][col] = board[row + 1][col];
+            board[row + 1][col] = 0;
+            shift = true;
+            didShift = true;
+          }
+        }
+      }
+    }
+
+    // Break from do...while() when loop has repeated
+    if (repeated) {
+      repeated = false;
+      break;
+    }
+
+    // Match the values
+    for (var col = 0; col < board.length; col++) {
+      // Match each row by the value above
+      for (var row = 0; row < board.length - 1; row++) {
+        // Do comparisons using [row + 1] for previous element
+        if (board[row + 1][col] === board[row][col] && board[row][col] !== 0) {
+          console.log(board[row][col]);
+          board[row + 1][col] = board[row][col] * 2;
+          board[row][col] = 0;
+          matchedTiles.push([row, col]);
+          didShift = true;
+        }
+      }
+    }
+
+    // Repeat run when fully executed
+    repeated = true;
+  } while (repeated); // End while() when broken prematurely
+
   // Return whether or not a successful match has been made
+  console.log(matchedTiles);
   return { tiles: matchedTiles, didShift };
 };
+
+/***********************
+ * Shift values down
+ * Match values
+ * Shift values down
+ **********************/
 export const down = board => {
+  // Declare variables
+  var shift = false;
+  var repeated = false;
   var matchedTiles = [];
   var didShift = false;
 
+  // Use do...while() for a breakable "if" statement
+  do {
+    // Run through each available column
+    for (var col = 0; col < board.length; col++) {
+      // Shift the available values down
+      shift = true;
+      while (shift) {
+        // Iterate through each row (bottom to top) checking the value below it
+        shift = false;
+        for (var row = board.length - 1; row > 0; row--) {
+          // Check if this tile is empty and the one above it is not-empty
+          if (board[row][col] === 0 && board[row - 1][col] !== 0) {
+            board[row][col] = board[row - 1][col];
+            board[row - 1][col] = 0;
+            shift = true;
+            didShift = true;
+          }
+        }
+      }
+    }
+
+    // Break from do...while() when loop has repeated
+    if (repeated) {
+      repeated = false;
+      break;
+    }
+
+    // Match the values
+    for (var col = 0; col < board.length; col++) {
+      // Match each column by the value to the left
+      for (var row = board.length - 1; row > 0; row--) {
+        // Do comparisons using [col + 1] for previous element
+        if (board[row - 1][col] === board[row][col] && board[row][col] !== 0) {
+          board[row - 1][col] = board[row][col] * 2;
+          board[row][col] = 0;
+          matchedTiles.push([row, col]);
+          didShift = true;
+        }
+      }
+    }
+
+    // Repeat run when fully executed
+    repeated = true;
+  } while (repeated); // End while() when broken prematurely
+
   // Return whether or not a successful match has been made
+  console.log(matchedTiles);
+
   return { tiles: matchedTiles, didShift };
-  //down comment
 };
 
 /***********************
@@ -169,35 +279,35 @@ export const validateBoard = board => {
 
   // Loop through each index of the board and check if a match can be made
   var value = 0;
-  for (var row = 0; !safe && (row < board.length); row++) {
-    for (var col = 0; !safe && (col < board[row].length); col++) {
+  for (var row = 0; !safe && row < board.length; row++) {
+    for (var col = 0; !safe && col < board[row].length; col++) {
       // Set the current value
       value = board[row][col];
 
       // Check if the current value is 0 (can still move)
-      safe = (value === 0);
+      safe = value === 0;
       if (safe) {
         break;
       }
 
       // Check the "above" row
       if (row - 1 !== -1) {
-        safe = safe || (board[row - 1][col] === value);
+        safe = safe || board[row - 1][col] === value;
       }
 
       // Check the "below" row
       if (row + 1 !== board.length) {
-        safe = safe || (board[row + 1][col] === value);
+        safe = safe || board[row + 1][col] === value;
       }
 
       // Check the "left" column
       if (col - 1 !== -1) {
-        safe = safe || (board[row][col - 1] === value);
+        safe = safe || board[row][col - 1] === value;
       }
 
       // Check the "right" column
       if (col + 1 !== board[row].length) {
-        safe = safe || (board[row][col + 1] === value);
+        safe = safe || board[row][col + 1] === value;
       }
     }
   }
