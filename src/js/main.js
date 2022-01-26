@@ -1,4 +1,4 @@
-import { right, left, up, down, generateTile, validateBoard } from "./move";
+import { right, left, up, down, generateTile, validateBoard } from "./move.js";
 var data = [
   [0, 0, 0, 0],
   [0, 0, 0, 0],
@@ -69,7 +69,7 @@ const checkKey = e => {
   triggerReflow(board);
   // Grab the event with the key code
   e = e || window.event;
-  e.keyCode = parseInt(e.keyCode);
+  var keyCode = parseInt(e.keyCode);
 
   // Return if invalid arrow key
   if (e.keyCode < 36 || e.keyCode > 41) return;
@@ -79,13 +79,13 @@ const checkKey = e => {
   board.style.animation = direction + " 0.5s ease-in-out 0s 1 forwards";
 
   var matched = {};
-  if (e.keyCode == 37 || e.detail.dir === "left") {
+  if (keyCode == 37 || e.detail.dir === "left") {
     matched = left(data);
-  } else if (e.keyCode == 38 || e.detail.dir === "up") {
+  } else if (keyCode == 38 || e.detail.dir === "up") {
     matched = up(data);
-  } else if (e.keyCode == 39 || e.detail.dir === "right") {
+  } else if (keyCode == 39 || e.detail.dir === "right") {
     matched = right(data);
-  } else if (e.keyCode == 40 || e.detail.dir === "down") {
+  } else if (keyCode == 40 || e.detail.dir === "down") {
     matched = down(data);
   }
 
