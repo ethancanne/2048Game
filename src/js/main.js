@@ -7,19 +7,36 @@ var data = [
 ];
 
 const board = document.getElementsByClassName("board")[0];
+const scoreTxtObj = document.getElementById("score");
+const highscoreTxtObj = document.getElementById("highscore");
 var score = 0;
 
 // Basic function to restart the game for a new playthrough
-const restartGame = selectedData => {
+const startGame = selectedData => {
   score = 0;
-  document.getElementById("score").textContent = score;
+  scoreTxtObj.textContent = score;
+  highscoreTxtObj.textContent = getCookie("highscore");
   document.getElementById("board-container").classList.add("play-screen");
   document.getElementById("side-container").classList.add("play-screen");
+  document.onkeydown = null;
+};
+
+const getCookie = key => {
+  var cookieArr = document.cookie.split(";");
+  for (var cnt = 0; cnt < cookieArr.length; cnt++) {
+    var cookiePair = cookieArr[cnt].split("=");
+
+    if (key === cookiePair[0].trim()) {
+      return decodeURIComponent(cookiePair[1]);
+    }
+  }
+
+  return "0";
 };
 
 // Restart the game as the page loads
 window.onload = () => {
-  restartGame();
+  startGame();
 };
 
 // TODO : 01/19/2022 : Replace with a more elequent message
@@ -35,7 +52,8 @@ const loseGame = () => {
     confirmButtonText: "Restart",
   }).then(result => {
     if (result.isConfirmed) {
-      restartGame();
+      saveScore();
+      startGame();
     }
   });
 };
@@ -67,12 +85,14 @@ const rerenderBoard = () => {
 const checkKey = e => {
   // Reflow the animations
   triggerReflow(board);
+
   // Grab the event with the key code
   e = e || window.event;
+  e.preventDefault(); // Avoid document sliding to the direction used
   var keyCode = parseInt(e.keyCode);
 
   // Return if invalid arrow key
-  if (e.keyCode < 36 || e.keyCode > 41) return;
+  if (keyCode < 36 || keyCode > 41) return;
 
   // Set the animation style depending on the direction
   var direction = e.key.substr("Arrow".length).toLowerCase();
@@ -114,15 +134,18 @@ const checkKey = e => {
           tile[0].toString() + tile[1].toString()
         );
 
-        //Add to the score variable and set that value to the text content of the score text DOM element
-        score += parseInt(matchedTile.textContent || 0);
-        const scoreTxtObj = document.getElementById("score");
-
         // Add to the score variable and set that value to the text content of the score text DOM element
         score += !isNaN(parseInt(matchedTile.textContent))
           ? parseInt(matchedTile.textContent)
           : 0;
         scoreTxtObj.textContent = score;
+
+        if (score > parseInt(highscoreTxtObj.textContent)) {
+          highscoreTxtObj.textContent = score;
+          triggerReflow(highscoreTxtObj);
+          highscoreTxtObj.style.animation =
+            "addScore 0.5s ease-in-out 0s 1 forwards";
+        }
 
         // Animation reflow and apply the animation to Score Text
         triggerReflow(scoreTxtObj);
@@ -145,6 +168,11 @@ const triggerReflow = obj => {
   obj.style.animation = "none";
   obj.offsetHeight;
   obj.style.animation = null;
+};
+
+const saveScore = () => {
+  document.cookie =
+    "highscore=" + highscoreTxtObj.textContent + "; max-age=3600; path=/";
 };
 
 // Initalize collapse button click event listener
@@ -173,12 +201,8 @@ document.getElementById("play-btn").onclick = () => {
       }
     }
 
-    var zoomProperty = 100;
-    zoomProperty -= layout * 2.5;
-
+    var zoomProperty = 100 - layout * 2.5;
     board.style.zoom = zoomProperty > 6 ? `${zoomProperty}%` : "6%";
-
-    console.log(customBoard);
     setBoard(customBoard);
   }
 };
@@ -188,18 +212,14 @@ const setBoard = selectedLayout => {
   document.getElementById("board-container").classList.remove("play-screen");
   document.getElementById("side-container").classList.remove("play-screen");
   document.onkeydown = checkKey;
-  document.addEventListener("swiped-left", checkKey);
-  document.addEventListener("swiped-right", checkKey);
-  document.addEventListener("swiped-up", checkKey);
-  document.addEventListener("swiped-down", checkKey);
-
   generateTile(data);
   rerenderBoard(data);
 };
 
 // Initalize end button click event listener
 document.getElementById("end-btn").onclick = () => {
-  restartGame();
+  saveScore();
+  startGame();
 };
 
 document.getElementById("layoutTxt").onchange = () => {
