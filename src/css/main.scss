@@ -129,6 +129,13 @@ body {
             font-size: 40px;
             font-weight: 900;
           }
+          #highscore {
+            margin-left: 10px;
+            padding: 20px;
+            text-align: center;
+            font-weight: 900;
+            margin: 20px 0 20px 0;
+          }
         }
 
         #collapseBtn {
@@ -190,7 +197,7 @@ body {
         padding: 5px;
         max-height: 100%;
         max-width: 100%;
-        overflow: auto;
+        overflow: visible;
 
         .row {
           display: flex;
@@ -252,10 +259,12 @@ body {
             &.t1024 {
               background-color: rgb(72, 113, 55);
               color: white;
+              font-size: 30px;
             }
             &.t2048 {
               background-color: rgb(133, 235, 90);
               color: white;
+              font-size: 30px;
             }
           }
         }
