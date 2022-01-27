@@ -8,10 +8,12 @@ var data = [
 
 const board = document.getElementsByClassName("board")[0];
 var score = 0;
+var hasWon = false;
 
 // Basic function to restart the game for a new playthrough
 const restartGame = selectedData => {
   score = 0;
+  hasWon = false;
   document.getElementById("score").textContent = score;
   document.getElementById("board-container").classList.add("play-screen");
   document.getElementById("side-container").classList.add("play-screen");
@@ -31,6 +33,24 @@ const loseGame = () => {
     icon: "error",
     title: "You Lose",
     html: "<h4>Sorry! Do you want to try again?</h4>",
+    showCloseButton: true,
+    confirmButtonText: "Restart",
+  }).then(result => {
+    if (result.isConfirmed) {
+      restartGame();
+    }
+  });
+};
+
+//You win
+const winGame = () => {
+  if (Swal.isVisible()) {
+    return;
+  }
+  Swal.fire({
+    icon: "success",
+    title: "You Won!",
+    html: "<h4>Close to continue, or restart for a new board.</h4>",
     showCloseButton: true,
     confirmButtonText: "Restart",
   }).then(result => {
@@ -104,7 +124,7 @@ const checkKey = e => {
   }
 
   // Animate the matched tiles after the board has been rerendered
-  // Add to the score
+  // Add to the score -----------------------------------------------------------------------
   if (matched.tiles.length > 0) {
     // Get tile DOM Elements
     matched.tiles.forEach(tile => {
@@ -138,7 +158,20 @@ const checkKey = e => {
   // If board is no longer valid, alert the user asynchronously
   if (!validateBoard(data) && !Swal.isVisible()) {
     setTimeout(loseGame, 500);
+    hasWon = false;
   }
+
+  // If 2048 is found and the player wins
+  if (matched.tiles.length > 0 && !hasWon) {
+    // Get tile DOM Elements
+    matched.tiles.forEach(tile => {
+      if (data[tile[0]][tile[1]] == 2048 && !Swal.isVisible()) {
+        setTimeout(winGame, 500);
+        hasWon = true;
+      }
+    });
+  }
+
 };
 
 const triggerReflow = obj => {
