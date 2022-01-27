@@ -73,7 +73,8 @@ const winGame = () => {
     confirmButtonText: "Restart",
   }).then(result => {
     if (result.isConfirmed) {
-      restartGame();
+      saveScore();
+      startGame();
     }
   });
 };
