@@ -195,7 +195,6 @@ const checkKey = e => {
       }
     });
   }
-
 };
 
 const triggerReflow = obj => {
@@ -246,6 +245,7 @@ const setBoard = selectedLayout => {
   document.getElementById("board-container").classList.remove("play-screen");
   document.getElementById("side-container").classList.remove("play-screen");
   document.onkeydown = checkKey;
+  document.addEventListener("swiped", checkKey);
   generateTile(data);
   rerenderBoard(data);
 };
