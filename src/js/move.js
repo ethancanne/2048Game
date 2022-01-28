@@ -43,7 +43,6 @@ export const up = board => {
       for (var row = 0; row < board.length - 1; row++) {
         // Do comparisons using [row + 1] for previous element
         if (board[row + 1][col] === board[row][col] && board[row][col] !== 0) {
-          console.log(board[row][col]);
           board[row + 1][col] = board[row][col] * 2;
           board[row][col] = 0;
           matchedTiles.push([row, col]);
@@ -57,7 +56,6 @@ export const up = board => {
   } while (repeated); // End while() when broken prematurely
 
   // Return whether or not a successful match has been made
-  console.log(matchedTiles);
   return { tiles: matchedTiles, didShift };
 };
 
@@ -119,8 +117,6 @@ export const down = board => {
   } while (repeated); // End while() when broken prematurely
 
   // Return whether or not a successful match has been made
-  console.log(matchedTiles);
-
   return { tiles: matchedTiles, didShift };
 };
 

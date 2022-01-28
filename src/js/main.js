@@ -163,6 +163,7 @@ const checkKey = e => {
 
         if (score > parseInt(highscoreTxtObj.textContent)) {
           highscoreTxtObj.textContent = score;
+          saveScore();
           triggerReflow(highscoreTxtObj);
           highscoreTxtObj.style.animation =
             "addScore 0.5s ease-in-out 0s 1 forwards";
