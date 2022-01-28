@@ -11,6 +11,8 @@ const scoreTxtObj = document.getElementById("score");
 const highscoreTxtObj = document.getElementById("highscore");
 var score = 0;
 var hasWon = false;
+var xDown = null;
+var yDown = null;
 
 // Basic function to restart the game for a new playthrough
 const startGame = selectedData => {
@@ -21,6 +23,9 @@ const startGame = selectedData => {
   document.getElementById("board-container").classList.add("play-screen");
   document.getElementById("side-container").classList.add("play-screen");
   document.onkeydown = null;
+  document.removeEventListener('touchstart', handleTouchStart, false);
+  document.removeEventListener('touchmove',  handleTouchMove, false);
+
 };
 
 const getCookie = key => {
@@ -103,20 +108,21 @@ const rerenderBoard = () => {
 };
 
 // Initalize arrow key event listeners
-const checkKey = e => {
+const checkKey = (e, swipe, direction) => {
   // Reflow the animations
   triggerReflow(board);
 
   // Grab the event with the key code
   e = e || window.event;
   e.preventDefault(); // Avoid document sliding to the direction used
-  var keyCode = parseInt(e.keyCode);
+  var keyCode = parseInt(swipe || e.keyCode);
+  var direction = (typeof swipe !== "number") ? e.key.substr("Arrow".length).toLowerCase() : direction;
 
   // Return if invalid arrow key
   if (keyCode < 36 || keyCode > 41) return;
 
   // Set the animation style depending on the direction
-  var direction = e.key.substr("Arrow".length).toLowerCase();
+  // var direction = e.key.substr("Arrow".length).toLowerCase();
   board.style.animation = direction + " 0.5s ease-in-out 0s 1 forwards";
 
   var matched = {};
@@ -196,6 +202,7 @@ const checkKey = e => {
       }
     });
   }
+
 };
 
 const triggerReflow = obj => {
@@ -246,7 +253,9 @@ const setBoard = selectedLayout => {
   document.getElementById("board-container").classList.remove("play-screen");
   document.getElementById("side-container").classList.remove("play-screen");
   document.onkeydown = checkKey;
-  document.addEventListener("swiped", checkKey);
+  document.addEventListener('touchstart', handleTouchStart, false);
+  document.addEventListener('touchmove', handleTouchMove, false);
+
   generateTile(data);
   rerenderBoard(data);
 };
@@ -260,4 +269,48 @@ document.getElementById("end-btn").onclick = () => {
 document.getElementById("layoutTxt").onchange = () => {
   document.getElementById("by-layout").textContent =
     "by " + document.getElementById("layoutTxt").value;
+};
+
+function getTouches(evt) {
+  return evt.touches // browser API
+}
+
+function handleTouchStart(evt) {
+    const firstTouch = getTouches(evt)[0];
+    xDown = firstTouch.clientX;
+    yDown = firstTouch.clientY;
+};
+
+function handleTouchMove(evt) {
+  if ( ! xDown || ! yDown ) {
+    return;
+  }
+
+  var xUp = evt.touches[0].clientX;
+  var yUp = evt.touches[0].clientY;
+
+  var xDiff = xDown - xUp;
+  var yDiff = yDown - yUp;
+
+  if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+    if ( xDiff > 0 ) {
+      /* right swipe */
+      checkKey(null, 37, "left");
+    } else {
+      /* left swipe */
+      checkKey(null, 39, "right");
+    }
+  } else {
+    if ( yDiff > 0 ) {
+      /* down swipe */
+      checkKey(null, 38, "up");
+    } else {
+      /* up swipe */
+      checkKey(null, 40, "down");
+    }
+  }
+
+  /* reset values */
+  xDown = null;
+  yDown = null;
 };
